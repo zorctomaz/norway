@@ -354,6 +354,33 @@
     .stat-strip div:nth-child(3){ border-left:none; }
     .price-card{ position:static; }
   }
+
+  /* ---------- LIGHTBOX ---------- */
+  .gtile{ cursor: zoom-in; }
+  .lightbox{
+    position: fixed; inset:0; z-index:1000; background: rgba(4,6,11,0.94);
+    display:none; align-items:center; justify-content:center; padding: 48px;
+    cursor: zoom-out; backdrop-filter: blur(4px);
+  }
+  .lightbox.open{ display:flex; }
+  .lightbox img{
+    max-width:100%; max-height:100%; width:auto; height:auto; display:block;
+    border-radius:12px; box-shadow: 0 30px 90px -20px rgba(0,0,0,0.7); cursor: default;
+  }
+  .lightbox-close{
+    position:absolute; top:20px; right:24px; width:44px; height:44px; border-radius:50%;
+    background: rgba(255,255,255,0.08); border:1px solid var(--border); color: var(--text);
+    font-size:1.4rem; line-height:1; cursor:pointer; display:flex; align-items:center; justify-content:center;
+  }
+  .lightbox-close:hover{ background: rgba(255,255,255,0.16); }
+  .lightbox-caption{
+    position:absolute; bottom:28px; left:0; right:0; text-align:center;
+    color: var(--text-dim); font-size:.9rem;
+  }
+  @media (prefers-reduced-motion: no-preference){
+    .lightbox img{ animation: lbIn .18s ease; }
+  }
+  @keyframes lbIn{ from{ opacity:0; transform: scale(.97);} to{ opacity:1; transform:none; } }
 </style>
 </head>
 <body>
@@ -744,6 +771,12 @@
     </div>
   </div>
 </footer>
+
+<div class="lightbox" id="lightbox" aria-hidden="true">
+  <button type="button" class="lightbox-close" id="lightboxClose" aria-label="Close">&times;</button>
+  <img id="lightboxImg" src="" alt="">
+  <div class="lightbox-caption" id="lightboxCaption"></div>
+</div>
 
 <script>
 (function(){
@@ -1258,6 +1291,50 @@
   }catch(e){}
 
   applyLang(initialLang);
+
+  /* ================= LIGHTBOX (click a gallery photo to enlarge) ================= */
+  var lightbox = document.getElementById('lightbox');
+  var lightboxImg = document.getElementById('lightboxImg');
+  var lightboxCaption = document.getElementById('lightboxCaption');
+  var lightboxClose = document.getElementById('lightboxClose');
+  var lastFocused = null;
+
+  function openLightbox(el){
+    var bg = getComputedStyle(el).backgroundImage;
+    var match = bg.match(/url\(["']?(.*?)["']?\)/);
+    if(!match) return;
+    lastFocused = document.activeElement;
+    lightboxImg.src = match[1];
+    var labelEl = el.querySelector('span');
+    lightboxImg.alt = labelEl ? labelEl.textContent : '';
+    lightboxCaption.textContent = labelEl ? labelEl.textContent : '';
+    lightbox.classList.add('open');
+    lightbox.setAttribute('aria-hidden', 'false');
+    lightboxClose.focus();
+  }
+  function closeLightbox(){
+    lightbox.classList.remove('open');
+    lightbox.setAttribute('aria-hidden', 'true');
+    lightboxImg.src = '';
+    if(lastFocused && lastFocused.focus){ lastFocused.focus(); }
+  }
+
+  document.querySelectorAll('.gtile').forEach(function(el){
+    el.setAttribute('role', 'button');
+    el.setAttribute('tabindex', '0');
+    el.addEventListener('click', function(){ openLightbox(el); });
+    el.addEventListener('keydown', function(e){
+      if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); openLightbox(el); }
+    });
+  });
+
+  lightboxClose.addEventListener('click', closeLightbox);
+  lightbox.addEventListener('click', function(e){
+    if(e.target === lightbox){ closeLightbox(); }
+  });
+  document.addEventListener('keydown', function(e){
+    if(e.key === 'Escape' && lightbox.classList.contains('open')){ closeLightbox(); }
+  });
 
 })();
 </script>
