@@ -2,7 +2,8 @@
 <html lang="en" id="htmlRoot">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#06090f">
 <title id="pageTitle">Norway Arctic Expedition</title>
 <meta id="pageDescription" name="description" content="A 10-day guided Norway adventure for up to 8 people: whale watching, Northern Lights, Tromsø sightseeing, and a van road trip through the Arctic — led by an experienced icebreaker crew member, skier, mountaineer and paraglider.">
 <style>
@@ -293,7 +294,7 @@
   label{ font-size:.82rem; font-weight:700; color: var(--text-dim); display:block; margin-bottom:6px; }
   input, select, textarea{
     width:100%; padding: 12px 14px; border-radius:10px; border:1px solid var(--border);
-    background: rgba(255,255,255,0.03); color: var(--text); font-family:inherit; font-size:.95rem;
+    background: rgba(255,255,255,0.03); color: var(--text); font-family:inherit; font-size:16px;
     outline:none; transition: border-color .15s ease, background .15s ease;
   }
   input::placeholder, textarea::placeholder{ color: var(--text-faint); }
@@ -350,9 +351,32 @@
   @media (max-width: 860px){
     nav.links{ display:none; }
     .burger{ display:flex; align-items:center; justify-content:center; }
+    .nav-cta > a.btn-primary{ display:none; }
     .stat-strip{ grid-template-columns: repeat(2,1fr); }
     .stat-strip div:nth-child(3){ border-left:none; }
     .price-card{ position:static; }
+  }
+
+  /* ---------- MOBILE OPTIMIZATIONS ---------- */
+  @media (max-width: 600px){
+    .section{ padding: 60px 0; }
+    .hero .wrap{ padding-top: 24px; padding-bottom: 64px; }
+    .hero-ctas{ flex-direction:column; align-items:stretch; }
+    .hero-ctas .btn{ width:100%; }
+    .countdown-inner{ flex-direction:column; align-items:flex-start; }
+    .countdown-clock{ width:100%; }
+    .cbox{ flex:1; min-width:0; padding:10px 6px; }
+    .brand-name{ font-size:.92rem; }
+  }
+  @media (max-width: 420px){
+    .badge-row .pill{ font-size:.74rem; padding:7px 11px; }
+    .stat-strip .num{ font-size:1.25rem; }
+    .nav-inner{ padding: 14px 16px; }
+    .wrap{ padding: 0 16px; }
+  }
+  @supports (padding: max(0px)){
+    .nav-inner{ padding-left: max(24px, env(safe-area-inset-left)); padding-right: max(24px, env(safe-area-inset-right)); }
+    footer .wrap{ padding-bottom: env(safe-area-inset-bottom); }
   }
 
   /* ---------- LIGHTBOX ---------- */
@@ -424,10 +448,6 @@
   <a href="#video" data-i18n="nav.video">Video</a>
   <a href="#booking" data-i18n="nav.bookingFull">Pricing &amp; Booking</a>
   <a href="#faq" data-i18n="nav.faqFull">FAQ</a>
-  <div class="lang-switch" role="group" aria-label="Language / Jezik">
-    <button type="button" class="lang-btn" data-lang="en">EN</button>
-    <button type="button" class="lang-btn" data-lang="sl">SI</button>
-  </div>
 </div>
 
 <!-- ============ HERO ============ -->
