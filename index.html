@@ -267,7 +267,8 @@
     box-shadow: var(--shadow); background:#000;
   }
   .video-frame iframe, .video-frame video{ position:absolute; inset:0; width:100%; height:100%; border:0; object-fit:cover; }
-  .video-caption{ margin: 12px 2px 0; font-size:.85rem; color: var(--text-faint); }
+  .video-frame.vertical{ aspect-ratio: 9/16; max-width:340px; margin:0 auto; }
+  .video-caption{ margin: 12px 2px 0; font-size:.85rem; color: var(--text-faint); text-align:center; }
 
   /* ---------- PRICING / BOOKING ---------- */
   section#booking{ background: var(--bg-alt); border-top:1px solid var(--border); }
@@ -651,12 +652,10 @@
         <p class="video-caption" data-i18n="video.cap1">Breaking ice, on the job — the icebreaker work behind those 5 years in the Arctic.</p>
       </div>
       <div>
-        <div class="video-frame">
-          <video controls preload="metadata" playsinline title="Giilavárri, 1163 m">
-            <source src="assets/videos/giilavarri-1163m.mp4" type="video/mp4">
-          </video>
+        <div class="video-frame vertical">
+          <iframe id="videoIframe2" src="https://www.youtube-nocookie.com/embed/MXPiKfbuwa0" title="Video" loading="lazy" referrerpolicy="strict-origin-when-cross-origin" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
         </div>
-        <p class="video-caption" data-i18n="video.cap2">Giilavárri, 1163 m — a mountain day from the same range this trip explores.</p>
+        <p class="video-caption" data-i18n="video.cap2">A quick look from the trail — watch on YouTube.</p>
       </div>
     </div>
   </div>
@@ -859,8 +858,8 @@
       "video.eyebrow":"See It For Yourself", "video.h2":"The terrain, in motion",
       "video.p":"The same read on ice, weather and mountains that shapes how this trip is planned and guided.",
       "video.cap1":"Breaking ice, on the job — the icebreaker work behind those 5 years in the Arctic.",
-      "video.cap2":"Giilavárri, 1163 m — a mountain day from the same range this trip explores.",
-      "video.iframeTitle":"Icebreaking in the Arctic",
+      "video.cap2":"A quick look from the trail — watch on YouTube.",
+      "video.iframeTitle":"Icebreaking in the Arctic", "video.iframeTitle2":"Video",
       "countdown.next":"Next departure:", "countdown.days":"Days", "countdown.hours":"Hrs", "countdown.mins":"Min", "countdown.secs":"Sec",
       "countdown.suffix":"· Only {n} spots per trip",
       "booking.eyebrow":"Pricing &amp; Reservation", "booking.h2":"Plan your group and check the price",
@@ -938,8 +937,8 @@
       "video.eyebrow":"Poglej sam", "video.h2":"Teren v gibanju",
       "video.p":"Isto branje ledu, vremena in gora, ki oblikuje način, kako je to potovanje načrtovano in vodeno.",
       "video.cap1":"Lomljenje ledu pri delu — izkušnje, ki stojijo za tistimi 5 leti na Arktiki.",
-      "video.cap2":"Giilavárri, 1163 m — gorski dan iz istega gorovja, ki ga to potovanje raziskuje.",
-      "video.iframeTitle":"Lomljenje ledu na Arktiki",
+      "video.cap2":"Kratek pogled s poti — poglej na YouTubu.",
+      "video.iframeTitle":"Lomljenje ledu na Arktiki", "video.iframeTitle2":"Video",
       "countdown.next":"Naslednji odhod:", "countdown.days":"Dni", "countdown.hours":"Ur", "countdown.mins":"Min", "countdown.secs":"Sek",
       "countdown.suffix":"· Le {n} mest na potovanje",
       "booking.eyebrow":"Cene in rezervacija", "booking.h2":"Načrtuj svojo skupino in preveri ceno",
@@ -1290,6 +1289,7 @@
     decBtn.setAttribute('aria-label', I18N[lang]['misc.decAria']);
     incBtn.setAttribute('aria-label', I18N[lang]['misc.incAria']);
     document.getElementById('videoIframe1').setAttribute('title', I18N[lang]['video.iframeTitle']);
+    document.getElementById('videoIframe2').setAttribute('title', I18N[lang]['video.iframeTitle2']);
 
     populateTravellerSelect(lang);
     renderItinerary(lang);
