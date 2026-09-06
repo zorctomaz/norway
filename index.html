@@ -281,7 +281,8 @@
     border-radius: var(--radius); overflow:hidden; border:1px solid var(--border);
     box-shadow: var(--shadow); background:#000;
   }
-  .video-frame iframe{ position:absolute; inset:0; width:100%; height:100%; border:0; }
+  .video-frame iframe, .video-frame video{ position:absolute; inset:0; width:100%; height:100%; border:0; object-fit:cover; }
+  .video-caption{ margin: 12px 2px 0; font-size:.85rem; color: var(--text-faint); }
 
   /* ---------- PRICING / BOOKING ---------- */
   section#booking{ background: var(--bg-alt); border-top:1px solid var(--border); }
@@ -590,14 +591,27 @@
 
 <!-- ============ VIDEO ============ -->
 <section class="section" id="video">
-  <div class="wrap" style="max-width:840px;">
+  <div class="wrap" style="max-width:1080px;">
     <div class="section-head center">
       <div class="eyebrow" style="justify-content:center;">See It For Yourself</div>
-      <h2>Breaking ice, on the job</h2>
-      <p>Footage from the icebreaker work behind those 5 years in the Arctic — the same read on ice, weather and open water that shapes how this trip is planned and guided.</p>
+      <h2>The terrain, in motion</h2>
+      <p>The same read on ice, weather and mountains that shapes how this trip is planned and guided.</p>
     </div>
-    <div class="video-frame">
-      <iframe src="https://www.youtube-nocookie.com/embed/ANJt-dXkMVA" title="Icebreaking in the Arctic" loading="lazy" referrerpolicy="strict-origin-when-cross-origin" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+    <div class="grid grid-2">
+      <div>
+        <div class="video-frame">
+          <iframe src="https://www.youtube-nocookie.com/embed/ANJt-dXkMVA" title="Icebreaking in the Arctic" loading="lazy" referrerpolicy="strict-origin-when-cross-origin" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+        </div>
+        <p class="video-caption">Breaking ice, on the job — the icebreaker work behind those 5 years in the Arctic.</p>
+      </div>
+      <div>
+        <div class="video-frame">
+          <video controls preload="metadata" playsinline title="Giilavárri, 1163 m">
+            <source src="assets/videos/giilavarri-1163m.mp4" type="video/mp4">
+          </video>
+        </div>
+        <p class="video-caption">Giilavárri, 1163 m — a mountain day from the same range this trip explores.</p>
+      </div>
     </div>
   </div>
 </section>
