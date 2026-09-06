@@ -49,7 +49,8 @@
     color: var(--aurora-green); font-weight:700; margin-bottom: 14px;
   }
   .eyebrow::before{ content:""; width:24px; height:2px; background: var(--aurora-green); display:inline-block; }
-  .section{ padding: 92px 0; position:relative; }
+  .section{ padding: 92px 0; position:relative; scroll-margin-top: 84px; }
+  .hero{ scroll-margin-top: 0; }
   .section-head{ max-width: 700px; margin-bottom: 48px; }
   .section-head.center{ margin-left:auto; margin-right:auto; text-align:center; }
   .btn{
@@ -1033,12 +1034,21 @@
   var mobileNavSelect = document.getElementById('mobileNavSelect');
   mobileNavSelect.addEventListener('change', function(){
     var target = mobileNavSelect.value;
-    if(target){
-      var el = document.querySelector(target);
-      if(el){ el.scrollIntoView({ behavior:'smooth', block:'start' }); }
-    }
     mobileNavSelect.selectedIndex = 0;
     mobileNavSelect.blur();
+    if(!target) return;
+    // Small delay lets iOS/Android fully dismiss the native picker UI first —
+    // scrolling immediately on 'change' is unreliable on some mobile browsers.
+    setTimeout(function(){
+      var el = document.querySelector(target);
+      if(!el) return;
+      if(window.location.hash === target){
+        // Already on this hash (hashchange won't fire) — scroll manually.
+        el.scrollIntoView({ behavior:'smooth', block:'start' });
+      } else {
+        window.location.hash = target;
+      }
+    }, 80);
   });
 
   /* ---------- ITINERARY RENDER ---------- */
