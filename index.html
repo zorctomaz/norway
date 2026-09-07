@@ -396,14 +396,32 @@
     font-size:1.4rem; line-height:1; cursor:pointer; display:flex; align-items:center; justify-content:center;
   }
   .lightbox-close:hover{ background: rgba(255,255,255,0.16); }
+  .lightbox-nav{
+    position:absolute; top:50%; transform:translateY(-50%); width:48px; height:48px; border-radius:50%;
+    background: rgba(255,255,255,0.08); border:1px solid var(--border); color: var(--text);
+    font-size:1.7rem; line-height:1; cursor:pointer; display:flex; align-items:center; justify-content:center;
+  }
+  .lightbox-nav:hover{ background: rgba(255,255,255,0.16); }
+  .lightbox-prev{ left:16px; }
+  .lightbox-next{ right:16px; }
   .lightbox-caption{
     position:absolute; bottom:28px; left:0; right:0; text-align:center;
     color: var(--text-dim); font-size:.9rem;
+  }
+  .lightbox-counter{
+    position:absolute; top:26px; left:0; right:0; text-align:center;
+    color: var(--text-faint); font-size:.78rem; letter-spacing:.5px;
   }
   @media (prefers-reduced-motion: no-preference){
     .lightbox img{ animation: lbIn .18s ease; }
   }
   @keyframes lbIn{ from{ opacity:0; transform: scale(.97);} to{ opacity:1; transform:none; } }
+  @media (max-width:600px){
+    .lightbox{ padding:20px; }
+    .lightbox-nav{ width:40px; height:40px; font-size:1.4rem; }
+    .lightbox-prev{ left:6px; }
+    .lightbox-next{ right:6px; }
+  }
 </style>
 </head>
 <body>
@@ -782,7 +800,10 @@
 
 <div class="lightbox" id="lightbox" aria-hidden="true">
   <button type="button" class="lightbox-close" id="lightboxClose" aria-label="Close">&times;</button>
+  <button type="button" class="lightbox-nav lightbox-prev" id="lightboxPrev" aria-label="Previous">&#8249;</button>
   <img id="lightboxImg" src="" alt="">
+  <button type="button" class="lightbox-nav lightbox-next" id="lightboxNext" aria-label="Next">&#8250;</button>
+  <div class="lightbox-counter" id="lightboxCounter"></div>
   <div class="lightbox-caption" id="lightboxCaption"></div>
 </div>
 
@@ -869,7 +890,7 @@
       "footer.tagline":"A small, guide-led Norway trip: 10 days, 8 guests max, one van, whale watching, Northern Lights and the Arctic coastline around Tromsø.",
       "footer.tripTitle":"Trip", "footer.contactTitle":"Contact", "footer.requestBook":"Request to book", "footer.basedIn":"Based in Tromsø, Norway",
       "footer.copyright":"© <span id=\"year\"></span> ZorcArctic Expedition. Sample itinerary — dates &amp; prices are indicative.",
-      "misc.decAria":"Decrease group size", "misc.incAria":"Increase group size"
+      "misc.decAria":"Decrease group size", "misc.incAria":"Increase group size", "misc.prevAria":"Previous photo", "misc.nextAria":"Next photo"
     },
     sl: {
       "nav.highlights":"Doživetja", "nav.guide":"Vodnik", "nav.itinerary":"Itinerarij", "nav.includes":"Vključeno",
@@ -948,7 +969,7 @@
       "footer.tagline":"Majhno, vodeno potovanje po Norveški: 10 dni, največ 8 gostov, en kombi, opazovanje kitov, severni sij in arktična obala okoli Tromsøja.",
       "footer.tripTitle":"Potovanje", "footer.contactTitle":"Kontakt", "footer.requestBook":"Povpraševanje za rezervacijo", "footer.basedIn":"Sedež v Tromsøju, Norveška",
       "footer.copyright":"© <span id=\"year\"></span> ZorcArctic Expedition. Vzorčni itinerarij — datumi in cene so okvirni.",
-      "misc.decAria":"Zmanjšaj velikost skupine", "misc.incAria":"Povečaj velikost skupine"
+      "misc.decAria":"Zmanjšaj velikost skupine", "misc.incAria":"Povečaj velikost skupine", "misc.prevAria":"Prejšnja fotografija", "misc.nextAria":"Naslednja fotografija"
     }
   };
 
@@ -1278,6 +1299,8 @@
 
     decBtn.setAttribute('aria-label', I18N[lang]['misc.decAria']);
     incBtn.setAttribute('aria-label', I18N[lang]['misc.incAria']);
+    document.getElementById('lightboxPrev').setAttribute('aria-label', I18N[lang]['misc.prevAria']);
+    document.getElementById('lightboxNext').setAttribute('aria-label', I18N[lang]['misc.nextAria']);
     document.getElementById('videoIframe1').setAttribute('title', I18N[lang]['video.iframeTitle']);
     document.getElementById('videoIframe2').setAttribute('title', I18N[lang]['video.iframeTitle2']);
 
@@ -1311,22 +1334,39 @@
 
   applyLang(initialLang);
 
-  /* ================= LIGHTBOX (click a gallery photo to enlarge) ================= */
+  /* ================= LIGHTBOX (click a gallery photo to enlarge, swipe/arrows to browse) ================= */
   var lightbox = document.getElementById('lightbox');
   var lightboxImg = document.getElementById('lightboxImg');
   var lightboxCaption = document.getElementById('lightboxCaption');
+  var lightboxCounter = document.getElementById('lightboxCounter');
   var lightboxClose = document.getElementById('lightboxClose');
+  var lightboxPrev = document.getElementById('lightboxPrev');
+  var lightboxNext = document.getElementById('lightboxNext');
+  var galleryTiles = Array.prototype.slice.call(document.querySelectorAll('.gtile'));
+  var lightboxIndex = 0;
   var lastFocused = null;
 
-  function openLightbox(el){
+  function tileImageUrl(el){
     var bg = getComputedStyle(el).backgroundImage;
     var match = bg.match(/url\(["']?(.*?)["']?\)/);
-    if(!match) return;
-    lastFocused = document.activeElement;
-    lightboxImg.src = match[1];
+    return match ? match[1] : '';
+  }
+  function showLightbox(index){
+    if(!galleryTiles.length) return;
+    lightboxIndex = (index + galleryTiles.length) % galleryTiles.length;
+    var el = galleryTiles[lightboxIndex];
+    var url = tileImageUrl(el);
+    if(!url) return;
+    lightboxImg.src = url;
     var labelEl = el.querySelector('span');
-    lightboxImg.alt = labelEl ? labelEl.textContent : '';
-    lightboxCaption.textContent = labelEl ? labelEl.textContent : '';
+    var label = labelEl ? labelEl.textContent : '';
+    lightboxImg.alt = label;
+    lightboxCaption.textContent = label;
+    lightboxCounter.textContent = (lightboxIndex + 1) + ' / ' + galleryTiles.length;
+  }
+  function openLightbox(index){
+    lastFocused = document.activeElement;
+    showLightbox(index);
     lightbox.classList.add('open');
     lightbox.setAttribute('aria-hidden', 'false');
     lightboxClose.focus();
@@ -1338,22 +1378,44 @@
     if(lastFocused && lastFocused.focus){ lastFocused.focus(); }
   }
 
-  document.querySelectorAll('.gtile').forEach(function(el){
+  galleryTiles.forEach(function(el, idx){
     el.setAttribute('role', 'button');
     el.setAttribute('tabindex', '0');
-    el.addEventListener('click', function(){ openLightbox(el); });
+    el.addEventListener('click', function(){ openLightbox(idx); });
     el.addEventListener('keydown', function(e){
-      if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); openLightbox(el); }
+      if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); openLightbox(idx); }
     });
   });
 
   lightboxClose.addEventListener('click', closeLightbox);
+  lightboxPrev.addEventListener('click', function(){ showLightbox(lightboxIndex - 1); });
+  lightboxNext.addEventListener('click', function(){ showLightbox(lightboxIndex + 1); });
   lightbox.addEventListener('click', function(e){
     if(e.target === lightbox){ closeLightbox(); }
   });
   document.addEventListener('keydown', function(e){
-    if(e.key === 'Escape' && lightbox.classList.contains('open')){ closeLightbox(); }
+    if(!lightbox.classList.contains('open')) return;
+    if(e.key === 'Escape'){ closeLightbox(); }
+    else if(e.key === 'ArrowLeft'){ showLightbox(lightboxIndex - 1); }
+    else if(e.key === 'ArrowRight'){ showLightbox(lightboxIndex + 1); }
   });
+
+  // Touch swipe left/right to browse
+  var touchStartX = null, touchStartY = null;
+  lightbox.addEventListener('touchstart', function(e){
+    var t = e.changedTouches[0];
+    touchStartX = t.clientX; touchStartY = t.clientY;
+  }, { passive:true });
+  lightbox.addEventListener('touchend', function(e){
+    if(touchStartX === null) return;
+    var t = e.changedTouches[0];
+    var dx = t.clientX - touchStartX;
+    var dy = t.clientY - touchStartY;
+    touchStartX = null;
+    if(Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy)){
+      if(dx < 0){ showLightbox(lightboxIndex + 1); } else { showLightbox(lightboxIndex - 1); }
+    }
+  }, { passive:true });
 
 })();
 </script>
