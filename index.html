@@ -146,12 +146,6 @@
   }
   .hero-inner{ position:relative; z-index:3; width:100%; }
   .hero .wrap{ padding-top: 40px; padding-bottom: 120px; }
-  .badge-row{ display:flex; flex-wrap:wrap; gap:10px; margin-bottom: 22px; }
-  .pill{
-    display:inline-flex; align-items:center; gap:8px; padding: 8px 14px; border-radius:999px;
-    background: rgba(255,255,255,0.06); border:1px solid var(--border); font-size:.82rem; font-weight:700; color: var(--text-dim);
-  }
-  .pill svg{ width:15px; height:15px; color: var(--aurora-green); flex:none; }
   .hero h1{ font-size: clamp(2.3rem, 5.6vw, 4.1rem); max-width: 880px; margin-bottom: .3em; }
   .hero h1 em{ font-style:normal; background: linear-gradient(135deg, var(--aurora-green), var(--aurora-cyan)); -webkit-background-clip:text; background-clip:text; color:transparent; }
   .hero p.lead{ font-size: 1.15rem; max-width: 620px; color: var(--text-dim); }
@@ -372,7 +366,6 @@
     .brand-name{ font-size:.92rem; }
   }
   @media (max-width: 420px){
-    .badge-row .pill{ font-size:.74rem; padding:7px 11px; }
     .stat-strip .num{ font-size:1.25rem; }
     .nav-inner{ padding: 14px 16px; }
     .wrap{ padding: 0 16px; }
@@ -460,13 +453,6 @@
   <div class="stars"></div>
   <div class="hero-inner">
     <div class="wrap">
-      <div class="badge-row">
-        <span class="pill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v4M12 18v4M2 12h4M18 12h4M4.9 4.9l2.8 2.8M16.3 16.3l2.8 2.8M19.1 4.9l-2.8 2.8M7.7 16.3l-2.8 2.8"/></svg> <span data-i18n="hero.badge1">Aurora Season</span></span>
-        <span class="pill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19c3-6 6-9 8-9s5 3 8 9M2 15c4-1 6-4 6-4M22 15c-4-1-6-4-6-4"/></svg> <span data-i18n="hero.badge2">Whale Watching</span></span>
-        <span class="pill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 21h18M5 21V9l7-5 7 5v12M9 21v-6h6v6"/></svg> <span data-i18n="hero.badge3">Tromsø &amp; Beyond</span></span>
-        <span class="pill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M2 12h3M19 12h3M12 2v3M12 19v3"/></svg> <span data-i18n="hero.badge4">Max 8 Guests</span></span>
-        <span class="pill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22V11M12 11C10 9 10 6 12 3M12 11c2-2 2-5 0-8M8 6c-1 1-1 3 0 4M16 6c1 1 1 3 0 4M6 3c0 1 0 2 1 3M18 3c0 1 0 2-1 3"/><ellipse cx="12" cy="19" rx="3.2" ry="2.4"/></svg> <span data-i18n="hero.badge5">Reindeer &amp; Moose</span></span>
-      </div>
       <h1 data-i18n="hero.h1">10 Days chasing <em>Northern Lights</em>, whales, reindeer &amp; moose by van through Arctic Norway</h1>
       <p class="lead" data-i18n="hero.lead">A small-group, guide-led road trip through Norway's high Arctic — Tromsø sightseeing, whale-watching safaris, aurora hunting, and wild fjord landscapes, travelling together in a well-equipped van for up to 8 people.</p>
       <div class="hero-ctas">
