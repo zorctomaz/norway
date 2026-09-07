@@ -1385,10 +1385,18 @@
 
   // Hero media strip: reuse the gallery photos' already-embedded images (by index) so
   // the hero shows a live preview without duplicating the base64 data in the page.
+  // Photo thumbs open the same browsable lightbox as the gallery; the video thumb
+  // still just scrolls to the video section.
   document.querySelectorAll('.hero-thumb[data-tile]').forEach(function(thumb){
     var idx = parseInt(thumb.getAttribute('data-tile'), 10);
     var tile = galleryTiles[idx];
     if(tile){ thumb.style.backgroundImage = getComputedStyle(tile).backgroundImage; }
+    if(!thumb.classList.contains('hero-thumb-video')){
+      thumb.addEventListener('click', function(e){
+        e.preventDefault();
+        openLightbox(idx);
+      });
+    }
   });
 
   function tileImageUrl(el){
