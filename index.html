@@ -313,6 +313,8 @@
   }
   input::placeholder, textarea::placeholder{ color: var(--text-faint); }
   input:focus, select:focus, textarea:focus{ border-color: var(--aurora-green); background: rgba(77,255,184,0.05); }
+  input[readonly]{ color: var(--text-dim); cursor: default; }
+  input[readonly]:focus{ border-color: var(--border); background: rgba(255,255,255,0.03); }
   textarea{ resize: vertical; min-height: 90px; }
   .field-error{ color: var(--danger); font-size:.78rem; margin-top:6px; display:none; }
   .field.invalid input, .field.invalid textarea, .field.invalid select{ border-color: var(--danger); }
@@ -763,9 +765,9 @@
               <select id="travellersInput" name="travellers"></select>
             </div>
             <div class="field" data-field="date">
-              <label for="date" data-i18n="booking.dateLabel">Preferred departure</label>
-              <input type="date" id="date" name="date">
-              <div class="field-error" data-i18n="booking.dateErr">Please pick a date.</div>
+              <label for="dateDisplay" data-i18n="booking.dateLabel">Departure date</label>
+              <input type="text" id="dateDisplay" readonly>
+              <input type="hidden" id="date" name="date">
             </div>
           </div>
           <div class="field" data-field="message">
@@ -909,13 +911,13 @@
       "booking.travellers":"travellers", "booking.total":"Estimated total",
       "booking.deposit":"A 20% deposit reserves your spots; balance due 60 days before departure. Max group size: 8. Price is per person in a shared twin/double room — single room available for a supplement, ask when booking.",
       "booking.formTitle":"Request to book",
-      "booking.formIntro":"Send an inquiry with your preferred dates and group size — no payment is taken here, this just starts the conversation.",
+      "booking.formIntro":"Send an inquiry for the upcoming departure with your group size — no payment is taken here, this just starts the conversation.",
       "booking.successTitle":"Thanks — your email app should now open",
       "booking.successBody":"A pre-filled message is ready to send to tomaz.zorc@fotra.net. Just hit send in your email app.",
       "booking.nameLabel":"Full name", "booking.namePh":"Jane Traveller", "booking.nameErr":"Please enter your name.",
       "booking.emailLabel":"Email", "booking.emailPh":"you@example.com", "booking.emailErr":"Please enter a valid email address.",
       "booking.travellersLabel":"Number of travellers",
-      "booking.dateLabel":"Preferred departure", "booking.dateErr":"Please pick a date.",
+      "booking.dateLabel":"Departure date",
       "booking.msgLabel":"Anything we should know? (optional)", "booking.msgPh":"Ski level, dietary needs, questions about the paragliding add-on…",
       "booking.submit":"Send Inquiry", "booking.note":"By submitting you agree to be contacted about this trip. No payment details are collected on this page.",
       "booking.travellerOptions":["1 person","2 people","3 people","4 people","5 people","6 people","7 people","8 people"],
@@ -989,13 +991,13 @@
       "booking.travellers":"potnikov", "booking.total":"Ocenjena skupna cena",
       "booking.deposit":"20-odstotni polog rezervira tvoja mesta; preostanek zapade 60 dni pred odhodom. Največja velikost skupine: 8. Cena velja na osebo v deljeni dvoposteljni sobi — enoposteljna soba je na voljo z doplačilom, povprašaj ob rezervaciji.",
       "booking.formTitle":"Povpraševanje za rezervacijo",
-      "booking.formIntro":"Pošlji povpraševanje z željenimi datumi in velikostjo skupine — tukaj se ne izvede plačilo, to je le začetek pogovora.",
+      "booking.formIntro":"Pošlji povpraševanje za prihajajoči odhod z velikostjo svoje skupine — tukaj se ne izvede plačilo, to je le začetek pogovora.",
       "booking.successTitle":"Hvala — tvoj e-poštni program bi se moral zdaj odpreti",
       "booking.successBody":"Pripravljeno je vnaprej izpolnjeno sporočilo za tomaz.zorc@fotra.net. Samo klikni pošlji v svojem e-poštnem programu.",
       "booking.nameLabel":"Ime in priimek", "booking.namePh":"Ana Popotnica", "booking.nameErr":"Prosimo, vnesi svoje ime.",
       "booking.emailLabel":"E-pošta", "booking.emailPh":"ti@example.com", "booking.emailErr":"Prosimo, vnesi veljaven e-poštni naslov.",
       "booking.travellersLabel":"Število potnikov",
-      "booking.dateLabel":"Željeni datum odhoda", "booking.dateErr":"Prosimo, izberi datum.",
+      "booking.dateLabel":"Datum odhoda",
       "booking.msgLabel":"Kaj naj še vemo? (neobvezno)", "booking.msgPh":"Nivo smučanja, posebne prehranske potrebe, vprašanja o dodatku jadralnega padalstva…",
       "booking.submit":"Pošlji povpraševanje", "booking.note":"S pošiljanjem se strinjaš, da te kontaktiramo glede tega potovanja. Na tej strani se ne zbirajo podatki o plačilu.",
       "booking.travellerOptions":["1 oseba","2 osebi","3 osebe","4 osebe","5 oseb","6 oseb","7 oseb","8 oseb"],
@@ -1225,9 +1227,17 @@
   }
   var nextDeparture = computeNextDeparture();
   var nextDepartureLabel = document.getElementById('nextDepartureLabel');
-  function renderDepartureLabel(lang){
+  var dateDisplay = document.getElementById('dateDisplay');
+  var dateField = document.getElementById('date');
+  function formatDeparture(lang){
     var locale = lang === 'sl' ? 'sl-SI' : undefined;
-    nextDepartureLabel.textContent = nextDeparture.toLocaleDateString(locale, { year:'numeric', month:'long', day:'numeric' });
+    return nextDeparture.toLocaleDateString(locale, { year:'numeric', month:'long', day:'numeric' });
+  }
+  function renderDepartureLabel(lang){
+    var formatted = formatDeparture(lang);
+    nextDepartureLabel.textContent = formatted;
+    dateDisplay.value = formatted;
+    dateField.value = nextDeparture.toISOString().split('T')[0];
   }
 
   var dEl = document.getElementById('cd-days');
@@ -1272,19 +1282,16 @@
     e.preventDefault();
     var name = form.name.value.trim();
     var email = form.email.value.trim();
-    var date = form.date.value;
     var travellers = form.travellers.value;
     var message = form.message.value.trim();
 
     var nameOk = name.length > 1;
     var emailOk = isValidEmail(email);
-    var dateOk = !!date;
 
     setError('name', !nameOk);
     setError('email', !emailOk);
-    setError('date', !dateOk);
 
-    if(nameOk && emailOk && dateOk){
+    if(nameOk && emailOk){
       var lang = currentLang;
       var subject = lang === 'sl'
         ? 'Povpraševanje za rezervacijo — ZorcArctic Expedition'
@@ -1294,7 +1301,7 @@
         I18N[lang]['booking.nameLabel'] + ': ' + name,
         I18N[lang]['booking.emailLabel'] + ': ' + email,
         I18N[lang]['booking.travellersLabel'] + ': ' + travellers,
-        I18N[lang]['booking.dateLabel'] + ': ' + date,
+        I18N[lang]['booking.dateLabel'] + ': ' + formatDeparture(lang),
         '',
         (message || noMsg)
       ];
@@ -1311,10 +1318,6 @@
   });
 
   document.getElementById('year').textContent = new Date().getFullYear();
-
-  var dateInput = document.getElementById('date');
-  var today = new Date();
-  dateInput.min = today.toISOString().split('T')[0];
 
   /* ================= LANGUAGE SWITCH ================= */
   var langButtons = document.querySelectorAll('.lang-btn');
