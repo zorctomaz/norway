@@ -149,7 +149,24 @@
   .hero h1{ font-size: clamp(2.3rem, 5.6vw, 4.1rem); max-width: 880px; margin-bottom: .3em; }
   .hero h1 em{ font-style:normal; background: linear-gradient(135deg, var(--aurora-green), var(--aurora-cyan)); -webkit-background-clip:text; background-clip:text; color:transparent; }
   .hero p.lead{ font-size: 1.15rem; max-width: 620px; color: var(--text-dim); }
-  .hero-ctas{ display:flex; flex-wrap:wrap; gap:14px; margin-top: 30px; }
+  .hero-media-strip{ display:flex; flex-wrap:wrap; align-items:center; gap:10px; margin: 18px 0 22px; }
+  .hero-thumb{
+    width:60px; height:60px; border-radius:12px; flex:none; position:relative; overflow:hidden;
+    background-size:cover; background-position:center; background-color: rgba(255,255,255,0.06);
+    border:2px solid rgba(255,255,255,0.25); box-shadow: 0 10px 24px -10px rgba(0,0,0,0.7);
+    transition: transform .15s ease, border-color .15s ease;
+  }
+  .hero-thumb:hover{ transform: translateY(-3px) scale(1.05); border-color: var(--aurora-green); }
+  .hero-thumb-video::after{
+    content:"\25B6"; position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
+    color:#fff; font-size:1rem; background: rgba(4,6,11,0.4);
+  }
+  .hero-media-more{
+    font-size:.82rem; font-weight:700; color: var(--text-dim); text-decoration:none;
+    border-bottom: 1px solid var(--border); padding-bottom:2px; margin-left:4px;
+  }
+  .hero-media-more:hover{ color: var(--aurora-green); border-color: var(--aurora-green); }
+  .hero-ctas{ display:flex; flex-wrap:wrap; gap:14px; margin-top: 8px; }
   .stat-strip{
     margin-top: 56px; display:grid; grid-template-columns: repeat(4,1fr); gap: 0;
     border: 1px solid var(--border); border-radius: var(--radius); overflow:hidden;
@@ -360,6 +377,7 @@
     .hero .wrap{ padding-top: 24px; padding-bottom: 64px; }
     .hero-ctas{ flex-direction:column; align-items:stretch; }
     .hero-ctas .btn{ width:100%; }
+    .hero-thumb{ width:48px; height:48px; }
     .countdown-inner{ flex-direction:column; align-items:flex-start; }
     .countdown-clock{ width:100%; }
     .cbox{ flex:1; min-width:0; padding:10px 6px; }
@@ -472,6 +490,14 @@
   <div class="hero-inner">
     <div class="wrap">
       <h1 data-i18n="hero.h1">10 Days chasing <em>Northern Lights</em>, whales, reindeer &amp; moose by van through Arctic Norway</h1>
+      <div class="hero-media-strip">
+        <a href="#gallery" class="hero-thumb" data-tile="0" title="Photo gallery"></a>
+        <a href="#gallery" class="hero-thumb" data-tile="1" title="Photo gallery"></a>
+        <a href="#gallery" class="hero-thumb" data-tile="3" title="Photo gallery"></a>
+        <a href="#gallery" class="hero-thumb" data-tile="6" title="Photo gallery"></a>
+        <a href="#video" class="hero-thumb hero-thumb-video" data-tile="4" title="Watch the videos"></a>
+        <a href="#gallery" class="hero-media-more" data-i18n="hero.mediaMore">See all photos &amp; videos</a>
+      </div>
       <p class="lead" data-i18n="hero.lead">A small-group, guide-led road trip through Norway's high Arctic — Tromsø sightseeing, whale-watching safaris, aurora hunting, and wild fjord landscapes, travelling together in a well-equipped van for up to 8 people.</p>
       <div class="hero-ctas">
         <a href="#booking" class="btn btn-primary" data-i18n="hero.cta1">Check Prices &amp; Reserve</a>
@@ -828,6 +854,7 @@
       "hero.lead":"A small-group, guide-led road trip through Norway's high Arctic — Tromsø sightseeing, whale-watching safaris, aurora hunting, and wild fjord landscapes, travelling together in a well-equipped van for up to 8 people.",
       "hero.cta1":"Check Prices &amp; Reserve", "hero.cta2":"View Full Itinerary",
       "hero.stat1":"Days / 9 Nights", "hero.stat2":"Guests per trip", "hero.stat3":"Guide, whole trip", "hero.stat4":"Best season", "hero.stat4num":"Oct–Mar",
+      "hero.mediaMore":"See all photos &amp; videos",
       "highlights.eyebrow":"The Experience", "highlights.h2":"Everything that makes Arctic Norway unforgettable",
       "highlights.p":"One trip, one guide, one van — five signature Arctic experiences woven into a relaxed 10-day loop out of Tromsø.",
       "highlights.c1t":"Whale Watching", "highlights.c1p":"Boat safaris in the fjords around Skjervøy / Kvænangen to spot orcas and humpback whales feeding on winter herring — one of the most reliable whale encounters on Earth.",
@@ -908,6 +935,7 @@
       "hero.lead":"Vodeno potovanje v manjši skupini skozi visoko Arktiko Norveške — ogled Tromsøja, safariji opazovanja kitov, lov na severni sij in divje fjordske pokrajine, vse skupaj v dobro opremljenem kombiju za do 8 oseb.",
       "hero.cta1":"Preveri cene in rezerviraj", "hero.cta2":"Poglej celoten itinerarij",
       "hero.stat1":"Dni / 9 noči", "hero.stat2":"Gostov na potovanje", "hero.stat3":"Vodnik, ves čas", "hero.stat4":"Najboljša sezona", "hero.stat4num":"Okt–Mar",
+      "hero.mediaMore":"Poglej vse slike in videe",
       "highlights.eyebrow":"Doživetje", "highlights.h2":"Vse, kar naredi arktično Norveško nepozabno",
       "highlights.p":"Eno potovanje, en vodnik, en kombi — pet osrednjih arktičnih doživetij, spletenih v sproščeno 10-dnevno pot iz Tromsøja.",
       "highlights.c1t":"Opazovanje kitov", "highlights.c1p":"Safariji s čolnom po fjordih okoli Skjervøya in Kvænangna, kjer opazuješ orke in grbaste kite, ki se pozimi hranijo s sledi — eno najbolj zanesljivih mest za srečanje s kiti na svetu.",
@@ -1354,6 +1382,14 @@
   var galleryTiles = Array.prototype.slice.call(document.querySelectorAll('.gtile'));
   var lightboxIndex = 0;
   var lastFocused = null;
+
+  // Hero media strip: reuse the gallery photos' already-embedded images (by index) so
+  // the hero shows a live preview without duplicating the base64 data in the page.
+  document.querySelectorAll('.hero-thumb[data-tile]').forEach(function(thumb){
+    var idx = parseInt(thumb.getAttribute('data-tile'), 10);
+    var tile = galleryTiles[idx];
+    if(tile){ thumb.style.backgroundImage = getComputedStyle(tile).backgroundImage; }
+  });
 
   function tileImageUrl(el){
     var bg = getComputedStyle(el).backgroundImage;
