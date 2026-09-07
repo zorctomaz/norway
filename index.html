@@ -728,7 +728,7 @@
           <button type="button" id="incBtn" aria-label="Increase group size">+</button>
         </div>
         <div class="price-breakdown">
-          <div class="row"><span id="breakdownLabel">€2,450 × 2 travellers</span><span id="breakdownSub">— group discount 0%</span></div>
+          <div class="row"><span id="breakdownLabel">€2,450 × 2 travellers</span></div>
           <div class="row total"><span data-i18n="booking.total">Estimated total</span><span id="totalPrice">€4,900</span></div>
         </div>
         <p class="deposit-note" data-i18n="booking.deposit">A 20% deposit reserves your spots; balance due 60 days before departure. Max group size: 8. Price is per person in a shared twin/double room — single room available for a supplement, ask when booking.</p>
@@ -814,7 +814,7 @@
       <div>
         <h4 data-i18n="footer.contactTitle">Contact</h4>
         <ul>
-          <li><a href="mailto:hello@example.com">hello@example.com</a></li>
+          <li><a href="mailto:tomaz.zorc@fotra.net">tomaz.zorc@fotra.net</a></li>
           <li><a href="#booking" data-i18n="footer.requestBook">Request to book</a></li>
           <li><span style="color:var(--text-faint); font-size:.85rem;" data-i18n="footer.basedIn">Based in Tromsø, Norway</span></li>
         </ul>
@@ -908,11 +908,10 @@
       "booking.perPerson":"/ person", "booking.subline":"10 days · 9 nights · everything listed in \"What's Included\"",
       "booking.travellers":"travellers", "booking.total":"Estimated total",
       "booking.deposit":"A 20% deposit reserves your spots; balance due 60 days before departure. Max group size: 8. Price is per person in a shared twin/double room — single room available for a supplement, ask when booking.",
-      "booking.discountNone":"— no group discount yet", "booking.discountHas":"— group discount {p}%",
       "booking.formTitle":"Request to book",
       "booking.formIntro":"Send an inquiry with your preferred dates and group size — no payment is taken here, this just starts the conversation.",
-      "booking.successTitle":"Thanks — request noted!",
-      "booking.successBody":"This demo form doesn't send anything yet. Connect it to your email or a booking backend, then guests will hear back within 48 hours.",
+      "booking.successTitle":"Thanks — your email app should now open",
+      "booking.successBody":"A pre-filled message is ready to send to tomaz.zorc@fotra.net. Just hit send in your email app.",
       "booking.nameLabel":"Full name", "booking.namePh":"Jane Traveller", "booking.nameErr":"Please enter your name.",
       "booking.emailLabel":"Email", "booking.emailPh":"you@example.com", "booking.emailErr":"Please enter a valid email address.",
       "booking.travellersLabel":"Number of travellers",
@@ -989,11 +988,10 @@
       "booking.perPerson":"/ osebo", "booking.subline":"10 dni · 9 noči · vse, kar je navedeno pod \"Kaj je vključeno\"",
       "booking.travellers":"potnikov", "booking.total":"Ocenjena skupna cena",
       "booking.deposit":"20-odstotni polog rezervira tvoja mesta; preostanek zapade 60 dni pred odhodom. Največja velikost skupine: 8. Cena velja na osebo v deljeni dvoposteljni sobi — enoposteljna soba je na voljo z doplačilom, povprašaj ob rezervaciji.",
-      "booking.discountNone":"— brez skupinskega popusta", "booking.discountHas":"— skupinski popust {p} %",
       "booking.formTitle":"Povpraševanje za rezervacijo",
       "booking.formIntro":"Pošlji povpraševanje z željenimi datumi in velikostjo skupine — tukaj se ne izvede plačilo, to je le začetek pogovora.",
-      "booking.successTitle":"Hvala — povpraševanje je zabeleženo!",
-      "booking.successBody":"Ta demo obrazec še ne pošlje ničesar. Poveži ga s svojo e-pošto ali sistemom za rezervacije, nato bodo gostje dobili odgovor v 48 urah.",
+      "booking.successTitle":"Hvala — tvoj e-poštni program bi se moral zdaj odpreti",
+      "booking.successBody":"Pripravljeno je vnaprej izpolnjeno sporočilo za tomaz.zorc@fotra.net. Samo klikni pošlji v svojem e-poštnem programu.",
       "booking.nameLabel":"Ime in priimek", "booking.namePh":"Ana Popotnica", "booking.nameErr":"Prosimo, vnesi svoje ime.",
       "booking.emailLabel":"E-pošta", "booking.emailPh":"ti@example.com", "booking.emailErr":"Prosimo, vnesi veljaven e-poštni naslov.",
       "booking.travellersLabel":"Število potnikov",
@@ -1168,7 +1166,6 @@
 
   var groupCountEl = document.getElementById('groupCount');
   var breakdownLabel = document.getElementById('breakdownLabel');
-  var breakdownSub = document.getElementById('breakdownSub');
   var totalPriceEl = document.getElementById('totalPrice');
   var pricePerPersonAmt = document.getElementById('pricePerPersonAmt');
   var travellersInput = document.getElementById('travellersInput');
@@ -1177,12 +1174,6 @@
   var countdownSuffix = document.getElementById('countdownSuffix');
   var spotsLeftVal = MAX_GROUP;
 
-  function discountFor(n){
-    if(n >= 6) return 0.12;
-    if(n >= 4) return 0.08;
-    if(n >= 2) return 0.04;
-    return 0;
-  }
   function formatMoney(n, lang){
     var locale = lang === 'sl' ? 'sl-SI' : 'en-US';
     var formatted = Math.round(n).toLocaleString(locale);
@@ -1205,14 +1196,9 @@
     var lang = currentLang;
     groupCountEl.textContent = count;
     travellersInput.value = String(count);
-    var discount = discountFor(count);
-    var subtotal = BASE_PRICE * count;
-    var total = subtotal * (1 - discount);
+    var total = BASE_PRICE * count;
     var word = lang === 'sl' ? travellerWordSl(count) : (count === 1 ? 'traveller' : 'travellers');
     breakdownLabel.textContent = formatMoney(BASE_PRICE, lang) + ' × ' + count + ' ' + word;
-    breakdownSub.textContent = discount > 0
-      ? I18N[lang]['booking.discountHas'].replace('{p}', Math.round(discount*100))
-      : I18N[lang]['booking.discountNone'];
     totalPriceEl.textContent = formatMoney(total, lang);
     pricePerPersonAmt.textContent = formatMoney(BASE_PRICE, lang);
     countdownSuffix.textContent = I18N[lang]['countdown.suffix'].replace('{n}', spotsLeftVal);
@@ -1228,13 +1214,12 @@
 
   /* ---------- COUNTDOWN TO NEXT DEPARTURE ---------- */
   function computeNextDeparture(){
+    // Fixed departure date: October 22. Rolls to next year once this year's date has passed.
     var now = new Date();
-    var candidate = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth() + 1, 1, 12, 0, 0));
-    var m = candidate.getUTCMonth();
-    var inSeason = (m >= 9 || m <= 2);
-    if(!inSeason){
-      var year = candidate.getUTCFullYear();
-      if(m > 2) { candidate = new Date(Date.UTC(year, 9, 1, 12, 0, 0)); }
+    var year = now.getUTCFullYear();
+    var candidate = new Date(Date.UTC(year, 9, 22, 12, 0, 0));
+    if(now.getTime() > candidate.getTime()){
+      candidate = new Date(Date.UTC(year + 1, 9, 22, 12, 0, 0));
     }
     return candidate;
   }
@@ -1281,11 +1266,15 @@
     return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
   }
 
+  var INQUIRY_EMAIL = 'tomaz.zorc@fotra.net';
+
   form.addEventListener('submit', function(e){
     e.preventDefault();
     var name = form.name.value.trim();
     var email = form.email.value.trim();
     var date = form.date.value;
+    var travellers = form.travellers.value;
+    var message = form.message.value.trim();
 
     var nameOk = name.length > 1;
     var emailOk = isValidEmail(email);
@@ -1296,10 +1285,25 @@
     setError('date', !dateOk);
 
     if(nameOk && emailOk && dateOk){
+      var lang = currentLang;
+      var subject = lang === 'sl'
+        ? 'Povpraševanje za rezervacijo — ZorcArctic Expedition'
+        : 'Booking inquiry — ZorcArctic Expedition';
+      var noMsg = lang === 'sl' ? '(brez dodatnega sporočila)' : '(no additional message)';
+      var bodyLines = [
+        I18N[lang]['booking.nameLabel'] + ': ' + name,
+        I18N[lang]['booking.emailLabel'] + ': ' + email,
+        I18N[lang]['booking.travellersLabel'] + ': ' + travellers,
+        I18N[lang]['booking.dateLabel'] + ': ' + date,
+        '',
+        (message || noMsg)
+      ];
+      var mailto = 'mailto:' + INQUIRY_EMAIL
+        + '?subject=' + encodeURIComponent(subject)
+        + '&body=' + encodeURIComponent(bodyLines.join('\n'));
+      window.location.href = mailto;
+
       successBox.classList.add('show');
-      form.reset();
-      count = parseInt(travellersInput.value, 10) || 2;
-      renderPrice();
       successBox.scrollIntoView({ behavior:'smooth', block:'nearest' });
     } else {
       successBox.classList.remove('show');
