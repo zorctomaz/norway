@@ -642,13 +642,13 @@
 
 <!-- ============ VIDEO ============ -->
 <section class="section" id="video">
-  <div class="wrap" style="max-width:1080px;">
+  <div class="wrap">
     <div class="section-head center">
       <div class="eyebrow" style="justify-content:center;" data-i18n="video.eyebrow">See It For Yourself</div>
       <h2 data-i18n="video.h2">The terrain, in motion</h2>
       <p data-i18n="video.p">The same read on ice, weather and mountains that shapes how this trip is planned and guided.</p>
     </div>
-    <div class="grid grid-2">
+    <div class="grid grid-3">
       <div>
         <div class="video-frame">
           <iframe id="videoIframe1" src="https://www.youtube.com/embed/ANJt-dXkMVA" title="Icebreaking in the Arctic" loading="lazy" referrerpolicy="strict-origin-when-cross-origin" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
@@ -660,6 +660,12 @@
           <iframe id="videoIframe2" src="https://www.youtube.com/embed/MXPiKfbuwa0" title="Video" loading="lazy" referrerpolicy="strict-origin-when-cross-origin" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
         </div>
         <p class="video-caption" data-i18n="video.cap2">A quick look from the trail — watch on YouTube.</p>
+      </div>
+      <div>
+        <div class="video-frame">
+          <iframe id="videoIframe3" src="https://www.youtube.com/embed/BbXSDa-yFgM" title="Video" loading="lazy" referrerpolicy="strict-origin-when-cross-origin" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+        </div>
+        <p class="video-caption" data-i18n="video.cap3">Another moment from the trip — watch on YouTube.</p>
       </div>
     </div>
   </div>
@@ -866,7 +872,8 @@
       "video.p":"The same read on ice, weather and mountains that shapes how this trip is planned and guided.",
       "video.cap1":"Breaking ice, on the job — the icebreaker work behind those 5 years in the Arctic.",
       "video.cap2":"A quick look from the trail — watch on YouTube.",
-      "video.iframeTitle":"Icebreaking in the Arctic", "video.iframeTitle2":"Video",
+      "video.cap3":"Another moment from the trip — watch on YouTube.",
+      "video.iframeTitle":"Icebreaking in the Arctic", "video.iframeTitle2":"Video", "video.iframeTitle3":"Video",
       "countdown.next":"Next departure:", "countdown.days":"Days", "countdown.hours":"Hrs", "countdown.mins":"Min", "countdown.secs":"Sec",
       "countdown.suffix":"· Only {n} spots per trip",
       "booking.eyebrow":"Pricing &amp; Reservation", "booking.h2":"Plan your group and check the price",
@@ -945,7 +952,8 @@
       "video.p":"Isto branje ledu, vremena in gora, ki oblikuje način, kako je to potovanje načrtovano in vodeno.",
       "video.cap1":"Lomljenje ledu pri delu — izkušnje, ki stojijo za tistimi 5 leti na Arktiki.",
       "video.cap2":"Kratek pogled s poti — poglej na YouTubu.",
-      "video.iframeTitle":"Lomljenje ledu na Arktiki", "video.iframeTitle2":"Video",
+      "video.cap3":"Še en utrinek s potovanja — poglej na YouTubu.",
+      "video.iframeTitle":"Lomljenje ledu na Arktiki", "video.iframeTitle2":"Video", "video.iframeTitle3":"Video",
       "countdown.next":"Naslednji odhod:", "countdown.days":"Dni", "countdown.hours":"Ur", "countdown.mins":"Min", "countdown.secs":"Sek",
       "countdown.suffix":"· Le {n} mest na potovanje",
       "booking.eyebrow":"Cene in rezervacija", "booking.h2":"Načrtuj svojo skupino in preveri ceno",
@@ -1303,6 +1311,7 @@
     document.getElementById('lightboxNext').setAttribute('aria-label', I18N[lang]['misc.nextAria']);
     document.getElementById('videoIframe1').setAttribute('title', I18N[lang]['video.iframeTitle']);
     document.getElementById('videoIframe2').setAttribute('title', I18N[lang]['video.iframeTitle2']);
+    document.getElementById('videoIframe3').setAttribute('title', I18N[lang]['video.iframeTitle3']);
 
     populateTravellerSelect(lang);
     renderItinerary(lang);
