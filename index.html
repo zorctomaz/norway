@@ -133,43 +133,41 @@
   .lang-btn.active{ background: var(--cyan); color: var(--black); }
   .lang-btn:hover:not(.active){ color: var(--yellow); }
 
-  /* ---------- NAV ---------- */
-  header.site{
-    position: fixed; top:0; left:0; right:0; z-index: 500;
-    background: var(--dos-blue);
+  /* ---------- TITLEBAR (matches ai.fotra.net / video.fotra.net / jadranje.fotra.net) ---------- */
+  .titlebar{
+    text-align:center;
+    max-width: var(--maxw);
+    margin:0 auto;
+    padding: 22px 24px 18px;
     border-bottom: 2px solid var(--cyan-dim);
-    transition: border-color .25s ease;
+    position:relative;
   }
-  header.site.scrolled{
-    border-bottom-color: var(--cyan);
-  }
-  .nav-inner{ display:flex; align-items:center; justify-content:space-between; padding: 14px 24px; max-width: var(--maxw); margin:0 auto; }
-  .nav-left{ display:flex; align-items:center; gap:16px; }
-  .home-btn{ display:inline-flex; align-items:center; justify-content:center; color: var(--cyan); text-decoration:none; transition: color .15s ease, transform .15s ease; }
+  .home-btn{ position:absolute; top:22px; left:24px; display:inline-flex; color: var(--cyan); text-decoration:none; transition: color .15s ease, transform .15s ease; }
   .home-btn svg{ width:22px; height:22px; flex:none; }
   .home-btn:hover, .home-btn:focus-visible{ color: var(--yellow); transform:translateY(-1px); }
+  .lang-toggle{ position:absolute; top:22px; right:24px; display:inline-flex; border:2px solid var(--cyan); }
+  .ascii-title{
+    font-size: clamp(2.2rem, 9vw, 3.2rem); line-height:1; letter-spacing:.12em;
+    color: var(--yellow); text-shadow: 0 0 6px rgba(255,255,85,0.5); margin:0 0 .35rem;
+    font-family:'VT323', monospace;
+  }
+  .titlebar .sub{ font-size: clamp(1rem, 3vw, 1.2rem); color: var(--cyan); letter-spacing:.08em; margin:0; }
+
+  /* Kept for the footer's own brand mark */
   .brand{ display:flex; align-items:center; gap:10px; font-weight:400; letter-spacing:.5px; font-size:1.35rem; text-decoration:none; }
   .brand svg{ display:none; }
   .brand-name{ background:none; -webkit-background-clip:initial; background-clip:initial; color: var(--yellow); text-shadow: 0 0 5px rgba(255,255,85,0.5); font-family:'VT323', monospace; }
-  nav.links{ display:flex; align-items:center; gap:22px; }
-  nav.links a{ text-decoration:none; color: var(--cyan); font-size:1.05rem; font-weight:400; transition: color .15s ease; }
-  nav.links a:hover{ color: var(--yellow); }
-  .nav-cta{ display:flex; align-items:center; gap:10px; }
-  .mobile-nav-select{
-    display:none;
-    appearance:none; -webkit-appearance:none; -moz-appearance:none;
-    background: var(--dos-blue);
-    border:2px solid var(--cyan); border-radius:0; color: var(--cyan);
-    font-family:'VT323', monospace; font-size:1.25rem; line-height:1; cursor:pointer;
-    width:40px; height:40px; padding:0; text-align:center; text-align-last:center;
+
+  @media (max-width:420px){
+    .titlebar{ padding:18px 16px 16px; }
+    .home-btn{ left:16px; }
+    .lang-toggle{ right:16px; }
   }
-  .mobile-nav-select:focus{ outline:2px solid var(--yellow); outline-offset:2px; }
-  .mobile-nav-select option{ background: var(--dos-blue); color: var(--white); font-size:1rem; }
 
   /* ---------- HERO ---------- */
   .hero{
     position: relative; min-height: 100vh; display:flex; align-items:center;
-    overflow:hidden; padding-top: 90px;
+    overflow:hidden;
     background: var(--dos-blue);
   }
   .hero-photo{
@@ -415,9 +413,6 @@
   .visually-hidden{ position:absolute; width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap; }
 
   @media (max-width: 860px){
-    nav.links{ display:none; }
-    .mobile-nav-select{ display:inline-block; }
-    .nav-cta > a.btn-primary{ display:none; }
     .stat-strip{ grid-template-columns: repeat(2,1fr); }
     .stat-strip div:nth-child(3){ border-left:none; }
     .price-card{ position:static; }
@@ -437,14 +432,11 @@
   }
   @media (max-width: 420px){
     .stat-strip .num{ font-size:1.4rem; }
-    .nav-inner{ padding: 12px 16px; }
     .wrap{ padding: 0 16px; }
-    .brand-name{ display:none; }
-    .mobile-nav-select{ width:36px; height:36px; font-size:1.15rem; }
     .lang-btn{ padding:6px 10px; }
   }
   @supports (padding: max(0px)){
-    .nav-inner{ padding-left: max(24px, env(safe-area-inset-left)); padding-right: max(24px, env(safe-area-inset-right)); }
+    .titlebar{ padding-left: max(24px, env(safe-area-inset-left)); padding-right: max(24px, env(safe-area-inset-right)); }
     footer .wrap{ padding-bottom: env(safe-area-inset-bottom); }
   }
 
@@ -497,48 +489,18 @@
 <body>
 <div class="crt-frame" aria-hidden="true"></div>
 
-<!-- ============ HEADER ============ -->
-<header class="site" id="siteHeader">
-  <div class="nav-inner">
-    <div class="nav-left">
-      <a href="https://fotra.net/" class="home-btn" aria-label="fotra.net" title="fotra.net">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-7 9 7"/><path d="M5 10v9a1 1 0 0 0 1 1h4v-5h4v5h4a1 1 0 0 0 1-1v-9"/></svg>
-      </a>
-      <a href="#top" class="brand">
-        <svg viewBox="0 0 24 24" fill="none"><path d="M2 20L8 8l4 6 3-4 7 10H2z" stroke="url(#g1)" stroke-width="1.8" stroke-linejoin="round"/><defs><linearGradient id="g1" x1="2" y1="8" x2="24" y2="20"><stop stop-color="#4dffb8"/><stop offset="1" stop-color="#4dd2ff"/></linearGradient></defs></svg>
-        <span class="brand-name">ZorcArctic Expedition</span>
-      </a>
-    </div>
-    <nav class="links">
-      <a href="#highlights" data-i18n="nav.highlights">Highlights</a>
-      <a href="#guide" data-i18n="nav.guide">Your Guide</a>
-      <a href="#itinerary" data-i18n="nav.itinerary">Itinerary</a>
-      <a href="#includes" data-i18n="nav.includes">Includes</a>
-      <a href="#gallery" data-i18n="nav.gallery">Gallery</a>
-      <a href="#video" data-i18n="nav.video">Video</a>
-      <a href="#booking" data-i18n="nav.pricing">Price</a>
-      <a href="#faq" data-i18n="nav.faq">FAQ</a>
-    </nav>
-    <div class="nav-cta">
-      <div class="lang-switch" role="group" aria-label="Language / Jezik">
-        <button type="button" class="lang-btn" data-lang="en">EN</button>
-        <button type="button" class="lang-btn" data-lang="sl">SI</button>
-      </div>
-      <a href="#booking" class="btn btn-primary" style="padding:11px 22px;" data-i18n="nav.reserve">Reserve a Spot</a>
-      <select class="mobile-nav-select" id="mobileNavSelect" aria-label="Navigate to section / Pojdi na razdelek">
-        <option value="" data-i18n="nav.jumpTo">☰</option>
-        <option value="#highlights" data-i18n="nav.highlights">Highlights</option>
-        <option value="#guide" data-i18n="nav.guide">Your Guide</option>
-        <option value="#itinerary" data-i18n="nav.itinerary">Itinerary</option>
-        <option value="#includes" data-i18n="nav.includesFull">What's Included</option>
-        <option value="#gallery" data-i18n="nav.gallery">Gallery</option>
-        <option value="#video" data-i18n="nav.video">Video</option>
-        <option value="#booking" data-i18n="nav.bookingFull">Pricing &amp; Booking</option>
-        <option value="#faq" data-i18n="nav.faqFull">FAQ</option>
-      </select>
-    </div>
+<!-- ============ TITLEBAR ============ -->
+<div class="titlebar">
+  <a href="https://fotra.net/" class="home-btn" aria-label="fotra.net" title="fotra.net">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-7 9 7"/><path d="M5 10v9a1 1 0 0 0 1 1h4v-5h4v5h4a1 1 0 0 0 1-1v-9"/></svg>
+  </a>
+  <div class="lang-toggle" role="group" aria-label="Language / Jezik">
+    <button type="button" class="lang-btn" data-lang="en">EN</button>
+    <button type="button" class="lang-btn" data-lang="sl">SI</button>
   </div>
-</header>
+  <p class="ascii-title" data-i18n="titlebar.title">NORWAY</p>
+  <p class="sub" data-i18n="titlebar.sub">ARCTIC EXPEDITION</p>
+</div>
 
 <!-- ============ HERO ============ -->
 <section class="hero" id="top">
@@ -904,6 +866,7 @@
   /* ================= I18N ================= */
   var I18N = {
     en: {
+      "titlebar.title":"NORWAY", "titlebar.sub":"ARCTIC EXPEDITION",
       "nav.highlights":"Highlights", "nav.guide":"Your Guide", "nav.itinerary":"Itinerary", "nav.includes":"Includes",
       "nav.video":"Video", "nav.pricing":"Price", "nav.faq":"FAQ", "nav.reserve":"Reserve a Spot", "nav.jumpTo":"☰",
       "nav.includesFull":"What's Included", "nav.gallery":"Gallery", "nav.bookingFull":"Pricing &amp; Booking", "nav.faqFull":"FAQ",
@@ -984,6 +947,7 @@
       "misc.decAria":"Decrease group size", "misc.incAria":"Increase group size", "misc.prevAria":"Previous photo", "misc.nextAria":"Next photo"
     },
     sl: {
+      "titlebar.title":"NORVEŠKA", "titlebar.sub":"ARKTIČNA ODPRAVA",
       "nav.highlights":"Doživetja", "nav.guide":"Vodnik", "nav.itinerary":"Itinerarij", "nav.includes":"Vključeno",
       "nav.video":"Video", "nav.pricing":"Cena", "nav.faq":"Vprašanja", "nav.reserve":"Rezerviraj mesto", "nav.jumpTo":"☰",
       "nav.includesFull":"Kaj je vključeno", "nav.gallery":"Galerija", "nav.bookingFull":"Cene in rezervacija", "nav.faqFull":"Pogosta vprašanja",
@@ -1123,35 +1087,6 @@
   };
 
   var currentLang = 'en';
-
-  /* ---------- NAV: scroll shadow + mobile menu ---------- */
-  var header = document.getElementById('siteHeader');
-  function onScroll(){
-    if(window.scrollY > 12){ header.classList.add('scrolled'); }
-    else{ header.classList.remove('scrolled'); }
-  }
-  window.addEventListener('scroll', onScroll, { passive: true });
-  onScroll();
-
-  var mobileNavSelect = document.getElementById('mobileNavSelect');
-  mobileNavSelect.addEventListener('change', function(){
-    var target = mobileNavSelect.value;
-    mobileNavSelect.selectedIndex = 0;
-    mobileNavSelect.blur();
-    if(!target) return;
-    // Small delay lets iOS/Android fully dismiss the native picker UI first —
-    // scrolling immediately on 'change' is unreliable on some mobile browsers.
-    setTimeout(function(){
-      var el = document.querySelector(target);
-      if(!el) return;
-      if(window.location.hash === target){
-        // Already on this hash (hashchange won't fire) — scroll manually.
-        el.scrollIntoView({ behavior:'smooth', block:'start' });
-      } else {
-        window.location.hash = target;
-      }
-    }, 80);
-  });
 
   /* ---------- ITINERARY RENDER ---------- */
   var accordionList = document.getElementById('accordionList');
