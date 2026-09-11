@@ -408,6 +408,66 @@
   .foot-grid a:hover{ color: var(--yellow); }
   .foot-bottom{ margin-top: 40px; padding-top: 20px; border-top:1px solid var(--cyan-dim); display:flex; flex-wrap:wrap; gap:14px; justify-content:space-between; align-items:center; color: var(--grey); font-size:.95rem; }
 
+  /* ---------- Footer terminal (BACK / SNAKE commands) ---------- */
+  .foot-terminal{ border-top:2px solid var(--cyan-dim); padding:16px 0; }
+  .term-line{ display:flex; align-items:center; gap:.5rem; cursor:text; }
+  .prompt{ color: var(--white); flex:none; white-space:nowrap; }
+  .term-input{
+    flex:1; min-width:0; background:transparent; border:none; outline:none; padding:0;
+    color: var(--white); font-family:'VT323', monospace; font-size:1.05rem; caret-color: var(--white);
+  }
+  .term-input::placeholder{ color: var(--grey); opacity:.85; }
+  .term-input.term-error{ color: var(--red); }
+
+  /* ---------- SNAKE overlay ---------- */
+  .snake-overlay{
+    position:fixed; inset:0; z-index:2000;
+    background: rgba(0,0,20,0.94);
+    display:none; align-items:center; justify-content:center; padding:24px;
+  }
+  .snake-overlay:not([hidden]){ display:flex; }
+  .snake-box{
+    position:relative;
+    width:100%; max-width:360px;
+    border: 6px double var(--cyan);
+    background: var(--dos-blue);
+    padding: clamp(1rem, 4vw, 1.8rem);
+    text-align:center;
+  }
+  .snake-titlebar{ border-bottom:2px solid var(--cyan-dim); padding-bottom:.7rem; margin-bottom:1rem; }
+  .snake-title{
+    font-size: clamp(1.8rem, 7vw, 2.6rem); line-height:1; letter-spacing:.1em; font-weight:400;
+    color: var(--yellow); text-shadow: 0 0 6px rgba(255,255,85,.5); margin:0 0 .3rem;
+  }
+  .snake-score{ font-size: clamp(1rem, 3vw, 1.2rem); color: var(--cyan); margin:0; }
+  .snake-box .canvas-wrap{ display:flex; justify-content:center; padding:.4rem 0; }
+  #snakeCanvas{
+    background: var(--black); border:3px double var(--cyan);
+    width: min(100%, 260px); height:auto; aspect-ratio:1/1; image-rendering:pixelated;
+  }
+  .snake-box .dpad{
+    display:grid; grid-template-columns: repeat(3, clamp(44px, 12vw, 54px)); grid-template-rows: repeat(3, clamp(44px, 12vw, 54px));
+    gap:12px; justify-content:center; width:100%; margin:1rem auto 0; -webkit-user-select:none; user-select:none;
+  }
+  .snake-box .dpad-btn{
+    font-family:'VT323', monospace; background: var(--dos-blue); color: var(--cyan);
+    border:2px solid var(--cyan); border-radius:0; font-size: clamp(1.3rem, 5vw, 1.7rem); line-height:1;
+    display:flex; align-items:center; justify-content:center; cursor:pointer; touch-action:manipulation;
+  }
+  .snake-box .dpad-up{ grid-column:2; grid-row:1; } .snake-box .dpad-left{ grid-column:1; grid-row:2; }
+  .snake-box .dpad-right{ grid-column:3; grid-row:2; } .snake-box .dpad-down{ grid-column:2; grid-row:3; }
+  .snake-box .dpad-btn:active{ background: var(--cyan); color: var(--black); }
+  .snake-status{
+    margin-top:1rem; padding-top:.8rem; border-top:2px solid var(--cyan-dim);
+    font-size: clamp(.9rem, 3vw, 1.1rem); color: var(--grey);
+    display:flex; justify-content:space-between; flex-wrap:wrap; gap:.4rem;
+  }
+  .snake-close{
+    position:absolute; top:0; right:0; background:none; border:none; color: var(--cyan);
+    font-family:'VT323', monospace; font-size:1.4rem; cursor:pointer; line-height:1; padding:.2rem .4rem;
+  }
+  .snake-close:hover{ color: var(--yellow); }
+
   ::selection{ background: var(--cyan); color: var(--black); }
   .visually-hidden{ position:absolute; width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap; }
 
@@ -814,42 +874,38 @@
 
 <!-- ============ FOOTER ============ -->
 <footer>
-  <div class="wrap">
-    <div class="foot-grid">
-      <div>
-        <a href="#top" class="brand" style="margin-bottom:14px; display:inline-flex;">
-          <svg viewBox="0 0 24 24" fill="none"><path d="M2 20L8 8l4 6 3-4 7 10H2z" stroke="url(#g2)" stroke-width="1.8" stroke-linejoin="round"/><defs><linearGradient id="g2" x1="2" y1="8" x2="24" y2="20"><stop stop-color="#4dffb8"/><stop offset="1" stop-color="#4dd2ff"/></linearGradient></defs></svg>
-          <span class="brand-name">ZorcArctic Expedition</span>
-        </a>
-        <p style="max-width:340px;" data-i18n="footer.tagline">A small, guide-led Norway trip: 10 days, 8 guests max, one van, whale watching, Northern Lights and the Arctic coastline around Tromsø.</p>
-      </div>
-      <div>
-        <h4 data-i18n="footer.tripTitle">Trip</h4>
-        <ul>
-          <li><a href="#itinerary" data-i18n="nav.itinerary">Itinerary</a></li>
-          <li><a href="#includes" data-i18n="nav.includesFull">What's included</a></li>
-          <li><a href="#gallery" data-i18n="nav.gallery">Gallery</a></li>
-          <li><a href="#faq" data-i18n="nav.faqFull">FAQ</a></li>
-        </ul>
-      </div>
-      <div>
-        <h4 data-i18n="footer.contactTitle">Contact</h4>
-        <ul>
-          <li><a href="mailto:tomaz.zorc@fotra.net">tomaz.zorc@fotra.net</a></li>
-          <li><a href="#booking" data-i18n="footer.requestBook">Request to book</a></li>
-          <li><span style="color:var(--text-faint); font-size:.95rem;" data-i18n="footer.basedIn">Based in Tromsø, Norway</span></li>
-        </ul>
-      </div>
-    </div>
-    <div class="foot-bottom">
-      <span><span data-i18n="footer.copyright">© <span id="year"></span> ZorcArctic Expedition. Sample itinerary — dates &amp; prices are indicative.</span></span>
-      <div class="lang-switch" role="group" aria-label="Language / Jezik">
-        <button type="button" class="lang-btn" data-lang="sl">SI</button>
-        <button type="button" class="lang-btn" data-lang="en">EN</button>
+  <div class="foot-terminal">
+    <div class="wrap">
+      <div class="term-line">
+        <label for="termInput" class="prompt">C:\FOTRA\NORWAY&gt;</label>
+        <input type="text" id="termInput" class="term-input" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" aria-label="Command input" placeholder="back / snake" data-i18n-placeholder="term.placeholder">
       </div>
     </div>
   </div>
 </footer>
+
+<div class="snake-overlay" id="snakeOverlay" hidden>
+  <div class="snake-box">
+    <button type="button" class="snake-close" id="snakeClose" aria-label="Close">✕</button>
+    <div class="snake-titlebar">
+      <p class="snake-title" data-i18n="snake.title">SNAKE</p>
+      <p class="snake-score" id="snakeScore">SCORE: 0</p>
+    </div>
+    <div class="canvas-wrap">
+      <canvas id="snakeCanvas" width="220" height="220"></canvas>
+    </div>
+    <div class="dpad" role="group" aria-label="Snake controls">
+      <button type="button" class="dpad-btn dpad-up" data-dir="up" aria-label="Up">&#9650;</button>
+      <button type="button" class="dpad-btn dpad-left" data-dir="left" aria-label="Left">&#9664;</button>
+      <button type="button" class="dpad-btn dpad-right" data-dir="right" aria-label="Right">&#9654;</button>
+      <button type="button" class="dpad-btn dpad-down" data-dir="down" aria-label="Down">&#9660;</button>
+    </div>
+    <div class="snake-status">
+      <span id="snakeMsg" data-i18n="snake.idle">ARROWS/BTNS = MOVE</span>
+      <span data-i18n="snake.escBack">ESC=BACK</span>
+    </div>
+  </div>
+</div>
 
 <div class="lightbox" id="lightbox" aria-hidden="true">
   <button type="button" class="lightbox-close" id="lightboxClose" aria-label="Close">&times;</button>
@@ -868,6 +924,8 @@
   var I18N = {
     en: {
       "titlebar.title":"NORWAY", "titlebar.sub":"ARCTIC EXPEDITION",
+      "snake.title":"SNAKE", "snake.idle":"ARROWS/BTNS = MOVE", "snake.escBack":"ESC=BACK",
+      "term.placeholder":"command: back / snake",
       "nav.highlights":"Highlights", "nav.guide":"Your Guide", "nav.itinerary":"Itinerary", "nav.includes":"Includes",
       "nav.video":"Video", "nav.pricing":"Price", "nav.faq":"FAQ", "nav.reserve":"Reserve a Spot", "nav.jumpTo":"☰",
       "nav.includesFull":"What's Included", "nav.gallery":"Gallery", "nav.bookingFull":"Pricing &amp; Booking", "nav.faqFull":"FAQ",
@@ -949,6 +1007,8 @@
     },
     sl: {
       "titlebar.title":"NORVEŠKA", "titlebar.sub":"ARKTIČNA ODPRAVA",
+      "snake.title":"KAČA", "snake.idle":"PUŠČICE/GUMBI = PREMIK", "snake.escBack":"ESC=NAZAJ",
+      "term.placeholder":"ukaz: back / snake",
       "nav.highlights":"Doživetja", "nav.guide":"Vodnik", "nav.itinerary":"Itinerarij", "nav.includes":"Vključeno",
       "nav.video":"Video", "nav.pricing":"Cena", "nav.faq":"Vprašanja", "nav.reserve":"Rezerviraj mesto", "nav.jumpTo":"☰",
       "nav.includesFull":"Kaj je vključeno", "nav.gallery":"Galerija", "nav.bookingFull":"Cene in rezervacija", "nav.faqFull":"Pogosta vprašanja",
@@ -1309,7 +1369,8 @@
     }
   });
 
-  document.getElementById('year').textContent = new Date().getFullYear();
+  var yearEl = document.getElementById('year');
+  if(yearEl) yearEl.textContent = new Date().getFullYear();
 
   /* ================= LANGUAGE SWITCH ================= */
   var langButtons = document.querySelectorAll('.lang-btn');
@@ -1358,6 +1419,147 @@
       applyLang(btn.getAttribute('data-lang'));
     });
   });
+
+  /* ---------- SNAKE game + BACK/SNAKE terminal commands ---------- */
+  (function(){
+    var overlay = document.getElementById('snakeOverlay');
+    var canvas = document.getElementById('snakeCanvas');
+    var termInput = document.getElementById('termInput');
+    if(!overlay || !canvas || !termInput) return;
+    var ctx = canvas.getContext('2d');
+    var scoreEl = document.getElementById('snakeScore');
+    var msgEl = document.getElementById('snakeMsg');
+    var closeBtn = document.getElementById('snakeClose');
+
+    var GRID = 20;
+    var CELL = canvas.width / GRID;
+    var snake, dir, nextDir, food, score, loopId, gameOver, gameStarted;
+    var msgState = 'idle';
+    var msgs = {
+      sl: { idle:'PUŠČICE/GUMBI = PREMIK', playing:'IGRA SE...', over:'KONEC - ENTER/GUMB=ZNOVA' },
+      en: { idle:'ARROWS/BTNS = MOVE', playing:'PLAYING...', over:'GAME OVER - ENTER/BTN=RESTART' }
+    };
+    function updateMsg(){ msgEl.textContent = msgs[currentLang][msgState]; }
+
+    function resetGame(){
+      snake = [{x:10,y:10},{x:9,y:10},{x:8,y:10}];
+      dir = {x:1,y:0}; nextDir = {x:1,y:0};
+      score = 0; gameOver = false; gameStarted = false;
+      placeFood();
+      scoreEl.textContent = 'SCORE: 0';
+      msgState = 'idle'; updateMsg();
+      drawGame();
+    }
+    function placeFood(){
+      var ok = false;
+      while(!ok){
+        food = { x: Math.floor(Math.random()*GRID), y: Math.floor(Math.random()*GRID) };
+        ok = !snake.some(function(s){ return s.x === food.x && s.y === food.y; });
+      }
+    }
+    function drawGame(){
+      ctx.fillStyle = '#000000'; ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.fillStyle = '#FF5555'; ctx.fillRect(food.x*CELL, food.y*CELL, CELL, CELL);
+      snake.forEach(function(seg, i){
+        ctx.fillStyle = i === 0 ? '#FFFFFF' : '#55FF55';
+        ctx.fillRect(seg.x*CELL + 1, seg.y*CELL + 1, CELL - 2, CELL - 2);
+      });
+    }
+    function tick(){
+      if(gameOver) return;
+      dir = nextDir;
+      var head = { x: snake[0].x + dir.x, y: snake[0].y + dir.y };
+      var hitWall = head.x < 0 || head.x >= GRID || head.y < 0 || head.y >= GRID;
+      var hitSelf = snake.some(function(s){ return s.x === head.x && s.y === head.y; });
+      if(hitWall || hitSelf){
+        gameOver = true; clearInterval(loopId); msgState = 'over'; updateMsg();
+        return;
+      }
+      snake.unshift(head);
+      if(head.x === food.x && head.y === food.y){
+        score += 10; scoreEl.textContent = 'SCORE: ' + score; placeFood();
+      } else {
+        snake.pop();
+      }
+      drawGame();
+    }
+    function startGame(){
+      if(gameStarted) return;
+      gameStarted = true; msgState = 'playing'; updateMsg();
+      loopId = setInterval(tick, 120);
+    }
+    function applyDir(d){
+      if(gameOver) return;
+      if(dir.x + d.x !== 0 || dir.y + d.y !== 0){ nextDir = d; }
+      startGame();
+    }
+    var dirMap = { up:{x:0,y:-1}, down:{x:0,y:1}, left:{x:-1,y:0}, right:{x:1,y:0} };
+    document.querySelectorAll('.dpad-btn').forEach(function(btn){
+      btn.addEventListener('click', function(e){
+        e.preventDefault();
+        if(gameOver){ resetGame(); return; }
+        applyDir(dirMap[btn.getAttribute('data-dir')]);
+      });
+    });
+
+    var snakeHistoryPushed = false;
+    function openSnake(){
+      overlay.hidden = false;
+      resetGame();
+      history.pushState({ fotraScreen:'snake' }, '');
+      snakeHistoryPushed = true;
+    }
+    function closeSnake(viaPopstate){
+      clearInterval(loopId);
+      overlay.hidden = true;
+      termInput.focus({ preventScroll:true });
+      if(snakeHistoryPushed && !viaPopstate){
+        snakeHistoryPushed = false;
+        history.back();
+      } else {
+        snakeHistoryPushed = false;
+      }
+    }
+    window.addEventListener('popstate', function(){
+      if(!overlay.hidden){ closeSnake(true); }
+    });
+    if(closeBtn) closeBtn.addEventListener('click', function(){ closeSnake(); });
+
+    document.addEventListener('keydown', function(e){
+      if(!overlay.hidden){
+        var arrowMap = { ArrowUp:{x:0,y:-1}, ArrowDown:{x:0,y:1}, ArrowLeft:{x:-1,y:0}, ArrowRight:{x:1,y:0} };
+        if(e.key === 'Escape'){ e.preventDefault(); closeSnake(); return; }
+        if(arrowMap[e.key]){ e.preventDefault(); applyDir(arrowMap[e.key]); return; }
+        if(gameOver && e.key === 'Enter'){ e.preventDefault(); resetGame(); return; }
+      }
+    });
+
+    var termErrors = {
+      sl: function(c){ return "'" + c + "' ni prepoznan ukaz. Poskusi: back, snake"; },
+      en: function(c){ return "'" + c + "' is not a recognized command. Try: back, snake"; }
+    };
+    function runCommand(raw){
+      var cmd = raw.trim();
+      if(!cmd) return;
+      var norm = cmd.toUpperCase();
+      if(norm === 'BACK'){ window.location.href = 'https://fotra.net/'; return; }
+      if(norm === 'SNAKE'){ openSnake(); return; }
+      termInput.classList.add('term-error');
+      termInput.value = '';
+      termInput.placeholder = termErrors[currentLang](cmd);
+      setTimeout(function(){
+        termInput.classList.remove('term-error');
+        termInput.setAttribute('placeholder', I18N[currentLang]['term.placeholder']);
+      }, 1600);
+    }
+    termInput.addEventListener('keydown', function(e){
+      if(e.key === 'Enter'){
+        e.preventDefault();
+        runCommand(termInput.value);
+        termInput.value = '';
+      }
+    });
+  })();
 
   var initialLang = 'en';
   try{
