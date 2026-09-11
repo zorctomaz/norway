@@ -410,6 +410,8 @@
 
   /* ---------- Footer terminal (BACK / SNAKE commands) ---------- */
   .foot-terminal{ border-top:2px solid var(--cyan-dim); padding:16px 0; }
+  .term-log{ display:flex; flex-direction:column; gap:2px; max-height:7.4em; overflow-y:auto; margin-bottom:.5rem; }
+  .term-log div{ white-space:pre-wrap; word-break:break-word; }
   .term-line{ display:flex; align-items:center; gap:.5rem; cursor:text; }
   .prompt{ color: var(--white); flex:none; white-space:nowrap; }
   .term-input{
@@ -417,7 +419,6 @@
     color: var(--white); font-family:'VT323', monospace; font-size:1.05rem; caret-color: var(--white);
   }
   .term-input::placeholder{ color: var(--grey); opacity:.85; }
-  .term-input.term-error{ color: var(--red); }
 
   /* ---------- SNAKE overlay ---------- */
   .snake-overlay{
@@ -876,9 +877,10 @@
 <footer>
   <div class="foot-terminal">
     <div class="wrap">
+      <div class="term-log" id="termLog" aria-live="polite"></div>
       <div class="term-line">
         <label for="termInput" class="prompt">C:\FOTRA\NORWAY&gt;</label>
-        <input type="text" id="termInput" class="term-input" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" aria-label="Command input" placeholder="back / snake" data-i18n-placeholder="term.placeholder">
+        <input type="text" id="termInput" class="term-input" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" aria-label="Command input" placeholder="type a command (HELP)" data-i18n-placeholder="term.placeholder">
       </div>
     </div>
   </div>
@@ -925,7 +927,7 @@
     en: {
       "titlebar.title":"NORWAY", "titlebar.sub":"ARCTIC EXPEDITION",
       "snake.title":"SNAKE", "snake.idle":"ARROWS/BTNS = MOVE", "snake.escBack":"ESC=BACK",
-      "term.placeholder":"command: back / snake",
+      "term.placeholder":"type a command (HELP)",
       "nav.highlights":"Highlights", "nav.guide":"Your Guide", "nav.itinerary":"Itinerary", "nav.includes":"Includes",
       "nav.video":"Video", "nav.pricing":"Price", "nav.faq":"FAQ", "nav.reserve":"Reserve a Spot", "nav.jumpTo":"☰",
       "nav.includesFull":"What's Included", "nav.gallery":"Gallery", "nav.bookingFull":"Pricing &amp; Booking", "nav.faqFull":"FAQ",
@@ -1008,7 +1010,7 @@
     sl: {
       "titlebar.title":"NORVEŠKA", "titlebar.sub":"ARKTIČNA ODPRAVA",
       "snake.title":"KAČA", "snake.idle":"PUŠČICE/GUMBI = PREMIK", "snake.escBack":"ESC=NAZAJ",
-      "term.placeholder":"ukaz: back / snake",
+      "term.placeholder":"vnesi ukaz (HELP)",
       "nav.highlights":"Doživetja", "nav.guide":"Vodnik", "nav.itinerary":"Itinerarij", "nav.includes":"Vključeno",
       "nav.video":"Video", "nav.pricing":"Cena", "nav.faq":"Vprašanja", "nav.reserve":"Rezerviraj mesto", "nav.jumpTo":"☰",
       "nav.includesFull":"Kaj je vključeno", "nav.gallery":"Galerija", "nav.bookingFull":"Cene in rezervacija", "nav.faqFull":"Pogosta vprašanja",
@@ -1534,31 +1536,55 @@
       }
     });
 
-    var termErrors = {
-      sl: function(c){ return "'" + c + "' ni prepoznan ukaz. Poskusi: back, snake"; },
-      en: function(c){ return "'" + c + "' is not a recognized command. Try: back, snake"; }
+    var termLog = document.getElementById('termLog');
+    var termHelp = {
+      sl: ['Ukazi: BACK = nazaj na fotra.net    SNAKE = igra Kača', 'HELP = ta pomoč'],
+      en: ['Commands: BACK = back to fotra.net    SNAKE = Snake game', 'HELP = this help']
     };
-    function runCommand(raw){
+    var termUnknown = {
+      sl: function(c){ return ["'" + c + "' ni prepoznan kot ukaz.", 'Vtipkaj HELP za pomoč.']; },
+      en: function(c){ return ["'" + c + "' is not a recognized command.", 'Type HELP for help.']; }
+    };
+    function termPrint(lines){
+      lines.forEach(function(line){
+        var row = document.createElement('div');
+        row.textContent = line;
+        termLog.appendChild(row);
+      });
+      termLog.scrollTop = termLog.scrollHeight;
+    }
+    function termRunCommand(raw){
       var cmd = raw.trim();
       if(!cmd) return;
+      termPrint(['C:\\FOTRA\\NORWAY>' + cmd]);
       var norm = cmd.toUpperCase();
-      if(norm === 'BACK'){ window.location.href = 'https://fotra.net/'; return; }
-      if(norm === 'SNAKE'){ openSnake(); return; }
-      termInput.classList.add('term-error');
-      termInput.value = '';
-      termInput.placeholder = termErrors[currentLang](cmd);
-      setTimeout(function(){
-        termInput.classList.remove('term-error');
-        termInput.setAttribute('placeholder', I18N[currentLang]['term.placeholder']);
-      }, 1600);
+      if(norm === 'BACK'){
+        termPrint([currentLang === 'sl' ? 'Odpiram ...' : 'Opening ...']);
+        window.setTimeout(function(){ window.location.href = 'https://fotra.net/'; }, 200);
+        return;
+      }
+      if(norm === 'SNAKE'){
+        termPrint([currentLang === 'sl' ? 'Zaganjam KACA.EXE ...' : 'Launching SNAKE.EXE ...']);
+        window.setTimeout(openSnake, 200);
+        return;
+      }
+      if(norm === 'HELP' || norm === '?'){ termPrint(termHelp[currentLang]); return; }
+      termPrint(termUnknown[currentLang](cmd));
     }
     termInput.addEventListener('keydown', function(e){
       if(e.key === 'Enter'){
         e.preventDefault();
-        runCommand(termInput.value);
+        termRunCommand(termInput.value);
         termInput.value = '';
       }
     });
+    document.querySelector('.foot-terminal').addEventListener('click', function(){ termInput.focus(); });
+
+    // Deferred: runs after applyLang(initialLang) below, so the greeting
+    // prints in the language the page actually loads in.
+    setTimeout(function(){
+      termPrint([currentLang === 'sl' ? 'Vtipkaj HELP za seznam ukazov.' : 'Type HELP for a list of commands.']);
+    }, 0);
   })();
 
   var initialLang = 'en';
