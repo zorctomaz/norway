@@ -138,6 +138,9 @@
     border-bottom-color: var(--cyan);
   }
   .nav-inner{ display:flex; align-items:center; justify-content:space-between; padding: 14px 24px; max-width: var(--maxw); margin:0 auto; }
+  .nav-left{ display:flex; align-items:center; gap:16px; }
+  .home-btn{ display:inline-flex; align-items:center; justify-content:center; font-size:1.4rem; line-height:1; text-decoration:none; filter:grayscale(1) brightness(1.6); transition: filter .15s ease, transform .15s ease; }
+  .home-btn:hover, .home-btn:focus-visible{ filter:none; transform:translateY(-1px); }
   .brand{ display:flex; align-items:center; gap:10px; font-weight:400; letter-spacing:.5px; font-size:1.35rem; text-decoration:none; }
   .brand svg{ display:none; }
   .brand-name{ background:none; -webkit-background-clip:initial; background-clip:initial; color: var(--yellow); text-shadow: 0 0 5px rgba(255,255,85,0.5); font-family:'VT323', monospace; }
@@ -489,10 +492,13 @@
 <!-- ============ HEADER ============ -->
 <header class="site" id="siteHeader">
   <div class="nav-inner">
-    <a href="#top" class="brand">
-      <svg viewBox="0 0 24 24" fill="none"><path d="M2 20L8 8l4 6 3-4 7 10H2z" stroke="url(#g1)" stroke-width="1.8" stroke-linejoin="round"/><defs><linearGradient id="g1" x1="2" y1="8" x2="24" y2="20"><stop stop-color="#4dffb8"/><stop offset="1" stop-color="#4dd2ff"/></linearGradient></defs></svg>
-      <span class="brand-name">ZorcArctic Expedition</span>
-    </a>
+    <div class="nav-left">
+      <a href="https://fotra.net/" class="home-btn" aria-label="fotra.net" title="fotra.net">🏠</a>
+      <a href="#top" class="brand">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M2 20L8 8l4 6 3-4 7 10H2z" stroke="url(#g1)" stroke-width="1.8" stroke-linejoin="round"/><defs><linearGradient id="g1" x1="2" y1="8" x2="24" y2="20"><stop stop-color="#4dffb8"/><stop offset="1" stop-color="#4dd2ff"/></linearGradient></defs></svg>
+        <span class="brand-name">ZorcArctic Expedition</span>
+      </a>
+    </div>
     <nav class="links">
       <a href="#highlights" data-i18n="nav.highlights">Highlights</a>
       <a href="#guide" data-i18n="nav.guide">Your Guide</a>
@@ -504,7 +510,6 @@
       <a href="#faq" data-i18n="nav.faq">FAQ</a>
     </nav>
     <div class="nav-cta">
-      <a href="https://fotra.net/" class="btn btn-ghost" style="padding:9px 16px; font-size:.85rem;">🏠 fotra.net</a>
       <div class="lang-switch" role="group" aria-label="Language / Jezik">
         <button type="button" class="lang-btn" data-lang="en">EN</button>
         <button type="button" class="lang-btn" data-lang="sl">SI</button>
