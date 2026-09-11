@@ -134,18 +134,19 @@
   .lang-btn:hover:not(.active){ color: var(--yellow); }
 
   /* ---------- TITLEBAR (matches ai.fotra.net / video.fotra.net / jadranje.fotra.net) ---------- */
+  /* The divider runs the full page width, like every other section border;
+     the icons/title/description stay inside the same centered .wrap column
+     used everywhere else on the page. */
   .titlebar{
     text-align:center;
-    max-width: var(--maxw);
-    margin:0 auto;
-    padding: 22px 24px 18px;
+    padding: 22px 0 18px;
     border-bottom: 2px solid var(--cyan-dim);
-    position:relative;
   }
-  .home-btn{ position:absolute; top:22px; left:24px; display:inline-flex; color: var(--cyan); text-decoration:none; transition: color .15s ease, transform .15s ease; }
+  .titlebar-inner{ position:relative; }
+  .home-btn{ position:absolute; top:0; left:24px; display:inline-flex; color: var(--cyan); text-decoration:none; transition: color .15s ease, transform .15s ease; }
   .home-btn svg{ width:22px; height:22px; flex:none; }
   .home-btn:hover, .home-btn:focus-visible{ color: var(--yellow); transform:translateY(-1px); }
-  .lang-toggle{ position:absolute; top:22px; right:24px; display:inline-flex; border:2px solid var(--cyan); }
+  .lang-toggle{ position:absolute; top:0; right:24px; display:inline-flex; border:2px solid var(--cyan); }
   .ascii-title{
     font-size: clamp(2.2rem, 9vw, 3.2rem); line-height:1; letter-spacing:.12em;
     color: var(--yellow); text-shadow: 0 0 6px rgba(255,255,85,0.5); margin:0 0 .35rem;
@@ -159,7 +160,7 @@
   .brand-name{ background:none; -webkit-background-clip:initial; background-clip:initial; color: var(--yellow); text-shadow: 0 0 5px rgba(255,255,85,0.5); font-family:'VT323', monospace; }
 
   @media (max-width:420px){
-    .titlebar{ padding:18px 16px 16px; }
+    .titlebar{ padding:18px 0 16px; }
     .home-btn{ left:16px; }
     .lang-toggle{ right:16px; }
   }
@@ -436,7 +437,7 @@
     .lang-btn{ padding:6px 10px; }
   }
   @supports (padding: max(0px)){
-    .titlebar{ padding-left: max(24px, env(safe-area-inset-left)); padding-right: max(24px, env(safe-area-inset-right)); }
+    .titlebar-inner{ padding-left: max(24px, env(safe-area-inset-left)); padding-right: max(24px, env(safe-area-inset-right)); }
     footer .wrap{ padding-bottom: env(safe-area-inset-bottom); }
   }
 
@@ -491,15 +492,17 @@
 
 <!-- ============ TITLEBAR ============ -->
 <div class="titlebar">
-  <a href="https://fotra.net/" class="home-btn" aria-label="fotra.net" title="fotra.net">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-7 9 7"/><path d="M5 10v9a1 1 0 0 0 1 1h4v-5h4v5h4a1 1 0 0 0 1-1v-9"/></svg>
-  </a>
-  <div class="lang-toggle" role="group" aria-label="Language / Jezik">
-    <button type="button" class="lang-btn" data-lang="en">EN</button>
-    <button type="button" class="lang-btn" data-lang="sl">SI</button>
+  <div class="wrap titlebar-inner">
+    <a href="https://fotra.net/" class="home-btn" aria-label="fotra.net" title="fotra.net">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-7 9 7"/><path d="M5 10v9a1 1 0 0 0 1 1h4v-5h4v5h4a1 1 0 0 0 1-1v-9"/></svg>
+    </a>
+    <div class="lang-toggle" role="group" aria-label="Language / Jezik">
+      <button type="button" class="lang-btn" data-lang="en">EN</button>
+      <button type="button" class="lang-btn" data-lang="sl">SI</button>
+    </div>
+    <p class="ascii-title" data-i18n="titlebar.title">NORWAY</p>
+    <p class="sub" data-i18n="titlebar.sub">ARCTIC EXPEDITION</p>
   </div>
-  <p class="ascii-title" data-i18n="titlebar.title">NORWAY</p>
-  <p class="sub" data-i18n="titlebar.sub">ARCTIC EXPEDITION</p>
 </div>
 
 <!-- ============ HERO ============ -->
