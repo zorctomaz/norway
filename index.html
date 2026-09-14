@@ -127,7 +127,7 @@
   .btn[disabled]{ opacity:.55; cursor:not-allowed; transform:none !important; box-shadow:none !important; }
 
   .lang-switch{ display:inline-flex; gap:2px; background: transparent; border:2px solid var(--cyan); border-radius:0; padding:0; }
-  .lang-btn{ border:none; background:none; color:var(--cyan); font-size:1.05rem; font-weight:400; letter-spacing:.5px; padding:6px 13px; border-radius:0; cursor:pointer; font-family:'VT323', monospace; transition: background .15s ease, color .15s ease; }
+  .lang-btn{ border:none; background:none; color:var(--cyan); font-size:clamp(0.95rem, 3vw, 1.15rem); font-weight:400; letter-spacing:.5px; padding:0.2rem 0.6rem; border-radius:0; cursor:pointer; font-family:'VT323', monospace; transition: background .15s ease, color .15s ease; }
   .lang-btn.active{ background: var(--cyan); color: var(--black); }
   .lang-btn:hover:not(.active){ color: var(--yellow); }
 
@@ -496,7 +496,6 @@
   @media (max-width: 420px){
     .stat-strip .num{ font-size:1.4rem; }
     .wrap{ padding: 0 16px; }
-    .lang-btn{ padding:6px 10px; }
   }
   @supports (padding: max(0px)){
     .titlebar-inner{ padding-left: max(24px, env(safe-area-inset-left)); padding-right: max(24px, env(safe-area-inset-right)); }
